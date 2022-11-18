@@ -437,12 +437,22 @@ impl OsuPpInner {
         let acc_value = self.compute_accuracy_value();
         let flashlight_value = self.compute_flashlight_value();
 
-        let pp = (aim_value.powf(1.1)
-            + speed_value.powf(1.1)
-            + acc_value.powf(1.1)
-            + flashlight_value.powf(1.1))
-        .powf(1.0 / 1.1)
-            * multiplier;
+        let pp = if self.mods.rx() {
+            (aim_value.powf(1.17) + acc_value.powf(1.15) + flashlight_value.powf(1.1))
+                .powf(1.0 / 1.1)
+                * multiplier
+        } else if self.mods.ap() {
+            (speed_value.powf(1.12) + acc_value.powf(1.15) + flashlight_value.powf(1.1))
+                .powf(1.0 / 1.1)
+                * multiplier
+        } else {
+            (aim_value.powf(1.1)
+                + speed_value.powf(1.1)
+                + acc_value.powf(1.1)
+                + flashlight_value.powf(1.1))
+            .powf(1.0 / 1.1)
+                * multiplier
+        };
 
         OsuPerformanceAttributes {
             difficulty: self.attrs,
@@ -579,7 +589,9 @@ impl OsuPpInner {
             * ((self.acc + relevant_acc) / 2.0).powf((14.5 - (self.attrs.od).max(8.0)) / 2.0);
 
         // * Scale the speed value with # of 50s to punish doubletapping.
-        speed_value *= 0.99_f64.powf(
+        let n50_factor: f64 = if self.mods.ap() { 0.96 } else { 0.98 };
+
+        speed_value *= n50_factor.powf(
             (self.state.n50 as f64 >= total_hits / 500.0) as u8 as f64
                 * (self.state.n50 as f64 - total_hits / 500.0),
         );
