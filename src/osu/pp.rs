@@ -487,13 +487,19 @@ impl OsuPpInner {
         aim_value *= self.get_combo_scaling_factor();
 
         let ar_factor = if self.mods.rx() {
-            0.0
-        } else if self.attrs.ar > 10.33 {
-            0.3 * (self.attrs.ar - 10.33)
-        } else if self.attrs.ar < 8.0 {
-            0.05 * (8.0 - self.attrs.ar)
+            if self.attrs.ar > 10.7 {
+                0.4 * (self.attrs.ar - 10.7)
+            } else {
+                0.0
+            }
         } else {
-            0.0
+            if self.attrs.ar > 10.33 {
+                0.3 * (self.attrs.ar - 10.33)
+            } else if self.attrs.ar < 8.0 {
+                0.05 * (8.0 - self.attrs.ar)
+            } else {
+                0.0
+            }
         };
 
         // * Buff for longer maps with high AR.
@@ -552,10 +558,20 @@ impl OsuPpInner {
 
         speed_value *= self.get_combo_scaling_factor();
 
-        let ar_factor = if self.attrs.ar > 10.33 {
-            0.3 * (self.attrs.ar - 10.33)
+        let ar_factor = if self.mods.rx() {
+            if self.attrs.ar > 10.7 {
+                0.4 * (self.attrs.ar - 10.7)
+            } else {
+                0.0
+            }
         } else {
-            0.0
+            if self.attrs.ar > 10.33 {
+                0.3 * (self.attrs.ar - 10.33)
+            } else if self.attrs.ar < 8.0 {
+                0.05 * (8.0 - self.attrs.ar)
+            } else {
+                0.0
+            }
         };
 
         // * Buff for longer maps with high AR.
@@ -600,10 +616,6 @@ impl OsuPpInner {
     }
 
     fn compute_accuracy_value(&self) -> f64 {
-        if self.mods.rx() {
-            return 0.0;
-        }
-
         // * This percentage only considers HitCircles of any value - in this part
         // * of the calculation we focus on hitting the timing hit window.
         let amount_hit_objects_with_acc = self.attrs.n_circles;
