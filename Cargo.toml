@@ -1,11 +1,11 @@
 [package]
 name = "rosu-pp"
 version = "0.9.2"
-authors = ["MaxOhn <ohn.m@hotmail.de>"]
+authors = ["MaxOhn <ohn.m@hotmail.de>", "7mochi <flyingcatdm@gmail.com>"]
 edition = "2018"
 license = "MIT"
 readme = "README.md"
-repository = "https://github.com/MaxOhn/rosu-pp"
+repository = "https://github.com/7mochi/rosu-pp"
 documentation = "https://docs.rs/rosu-pp/"
 description = "osu! difficulty and pp calculation for all modes"
 keywords = ["osu", "pp", "stars", "async"]
