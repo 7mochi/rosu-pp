@@ -374,7 +374,6 @@ impl<'m> OsuPP<'m> {
         // Penalize misses
         if effective_miss_count > 0.0 {
             let miss_penalty = self.calculate_miss_penalty(
-                attributes.aim_difficult_strain_count as f32,
                 effective_miss_count,
             );
 
@@ -466,7 +465,7 @@ impl<'m> OsuPP<'m> {
                 strain_count *= 0.5;
             }
 
-            let miss_penalty = self.calculate_miss_penalty(strain_count, effective_miss_count);
+            let miss_penalty = self.calculate_miss_penalty(effective_miss_count);
             speed_value *= miss_penalty;
         }
 
@@ -548,7 +547,7 @@ impl<'m> OsuPP<'m> {
     }
 
     #[inline]
-    fn calculate_miss_penalty(&self, strain_count: f32, effective_miss_count: f32) -> f32 {
+    fn calculate_miss_penalty(&self, effective_miss_count: f32) -> f32 {
         let total_hits = self.total_hits() as f32;
         
         0.97 * (1.0 - (effective_miss_count / total_hits).powf(0.5)).powf(1.0 + (effective_miss_count / 1.5))
