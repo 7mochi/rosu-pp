@@ -460,11 +460,6 @@ impl<'m> OsuPP<'m> {
 
         // Penalize misses
         if effective_miss_count > 0.0 {
-            let mut strain_count = attributes.speed_difficult_strain_count as f32;
-            if self.mods.rx() {
-                strain_count *= 0.5;
-            }
-
             let miss_penalty = self.calculate_miss_penalty(effective_miss_count);
             speed_value *= miss_penalty;
         }
